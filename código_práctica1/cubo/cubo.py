@@ -329,11 +329,3 @@ class Cubo:
 
     def visualizarMovimiento(self,tipo):
         return self.etq_corta[tipo]
-
-
-
-
-
-
-
-

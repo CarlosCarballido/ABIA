@@ -3,12 +3,9 @@ from cubo import *
 from problemaRubik import *
 from busqueda import *
 
-
-
 cubo = Cubo()
 
 print("CUBO SIN MEZCLAR:\n" + cubo.visualizar())
-
 
 #Mover frontal face
 cubo.mover(cubo.F)
@@ -26,14 +23,8 @@ print()
 
 print("CUBO INICIAL (MEZCLADO):\n" + cubo.visualizar())
 
-
-
-
-"""
-Descomentar una vez se implemente la búsqueda en anchura
 #Creación de un problema
 problema = Problema(EstadoRubik(cubo), BusquedaAnchura())
-
 
 print("SOLUCION:")
 opsSolucion = problema.obtenerSolucion()
@@ -46,5 +37,3 @@ if opsSolucion != None:
     print("CUBO FINAL:\n" + cubo.visualizar())
 else:
     print("no se ha encontrado solución")
-
-"""
