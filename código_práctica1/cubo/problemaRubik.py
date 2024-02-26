@@ -1,9 +1,5 @@
-
-
-
 from problema import *
 from cubo import *
-
 
 # Objeto que implementa la interfaz Estado para un cubo Rubik concreto.
 # La mayor parte de los métodos definidos en el interfaz Estado se delegan en el objeto Cubo.
