@@ -33,7 +33,6 @@ if opsSolucion != None:
     for o in opsSolucion:
         print(cubo.visualizarMovimiento(o.getEtiqueta()) + " ")
         cubo.mover(o.movimiento)
-    print()
-    print("CUBO FINAL:\n" + cubo.visualizar())
+    print("\nCUBO FINAL:\n" + cubo.visualizar())
 else:
     print("no se ha encontrado solución")
