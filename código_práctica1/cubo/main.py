@@ -1,7 +1,10 @@
 import sys
 from cubo import *
+from cubo.cubo import Cubo
 from problemaRubik import *
-from busqueda import *
+from busquedas.busqueda import *
+from busquedas.profundidad import *
+from busquedas.anchura import *
 
 cubo = Cubo()
 
