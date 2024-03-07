@@ -1,8 +1,8 @@
 import sys
 from cubo import *
-from cubo.cubo import Cubo
+from cubo import Cubo
 from problemaRubik import *
-from busquedas.busqueda import *
+from busqueda import *
 from busquedas.profundidad import *
 from busquedas.anchura import *
 
