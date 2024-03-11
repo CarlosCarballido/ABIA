@@ -1,10 +1,15 @@
 import sys
+
+#Añadir al path el directorio donde se encuentran los módulos
+sys.path.append('..')
+
+from profundidad import BusquedaProfundidad
+from anchura import BusquedaAnchura
+from profundidad_iterativa import BusquedaProfundidadIterativa
+
 from cubo import *
 from cubo import Cubo
 from problemaRubik import *
-from busqueda import *
-from busquedas.profundidad import *
-from busquedas.anchura import *
 
 cubo = Cubo()
 
@@ -27,7 +32,7 @@ print()
 print("CUBO INICIAL (MEZCLADO):\n" + cubo.visualizar())
 
 #Creación de un problema
-problema = Problema(EstadoRubik(cubo), BusquedaProfundidad())
+problema = Problema(EstadoRubik(cubo), BusquedaAnchura())
 
 print("SOLUCION:")
 opsSolucion = problema.obtenerSolucion()
