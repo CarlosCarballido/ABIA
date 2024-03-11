@@ -32,7 +32,12 @@ print()
 print("CUBO INICIAL (MEZCLADO):\n" + cubo.visualizar())
 
 #Creación de un problema
-problema = Problema(EstadoRubik(cubo), BusquedaAnchura())
+#problema = Problema(EstadoRubik(cubo), BusquedaProfundidad())
+
+#problema = Problema(EstadoRubik(cubo), BusquedaAnchura())
+
+edges = cubo.getEdges()[0]
+problema = Problema(EstadoRubik(cubo), BusquedaProfundidadIterativa(edges))
 
 print("SOLUCION:")
 opsSolucion = problema.obtenerSolucion()
