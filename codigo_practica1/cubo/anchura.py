@@ -1,5 +1,5 @@
-from busquedas.busqueda import Busqueda
-from cubo.nodos import NodoAnchura
+from busqueda import *
+from nodos import NodoAnchura
 
 
 class BusquedaAnchura(Busqueda):

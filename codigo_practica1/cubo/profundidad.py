@@ -1,5 +1,5 @@
-from busquedas.busqueda import Busqueda
-from cubo.nodos import NodoProfundidad
+from busqueda import *
+from nodos import NodoProfundidad
 
 
 class BusquedaProfundidad(Busqueda):

@@ -1,4 +1,4 @@
-from busquedas.busqueda import Busqueda
+from cubo.busqueda import Busqueda
 
 
 class BusquedaProfundidadIterativa(Busqueda):
