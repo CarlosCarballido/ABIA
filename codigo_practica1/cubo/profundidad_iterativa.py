@@ -1,10 +1,10 @@
 from busqueda import *
-from nodos import NodoProfundidad
+from nodos import NodoProfundidadIterativa
 
 class BusquedaProfundidadIterativa(Busqueda):
     
     # Implementa la búsqueda en profundidad iterativa.
-    # Si encuentra solución, recupera la lista de Operadores empleados almacenada en los atributos de los objetos NodoProfundidad.
+    # Si encuentra solución, recupera la lista de Operadores empleados almacenada en los atributos de los objetos NodoProfundidadIterativa.
     def buscarSolucion(self, inicial):
         profundidad_maxima = 0
         solucion = None
@@ -21,7 +21,7 @@ class BusquedaProfundidadIterativa(Busqueda):
         solucion = False
         abiertos = []
         cerrados = dict()
-        abiertos.append(NodoProfundidad(inicial, None, None, 0))  # Inicializa la profundidad en 0
+        abiertos.append(NodoProfundidadIterativa(inicial, None, None, 0))  # Inicializa la profundidad en 0
         cerrados[inicial.cubo.visualizar()] = inicial
         while not solucion and len(abiertos) > 0:
             nodoActual = abiertos.pop()
@@ -33,7 +33,7 @@ class BusquedaProfundidadIterativa(Busqueda):
                 for operador in actual.operadoresAplicables():
                     hijo = actual.aplicarOperador(operador)
                     if hijo.cubo.visualizar() not in cerrados.keys():
-                        abiertos.append(NodoProfundidad(hijo, nodoActual, operador, nodoActual.profundidad + 1))
+                        abiertos.append(NodoProfundidadIterativa(hijo, nodoActual, operador, nodoActual.profundidad + 1))
                         cerrados[hijo.cubo.visualizar()] = hijo
         if solucion:
             lista = []

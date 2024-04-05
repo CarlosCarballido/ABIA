@@ -11,7 +11,7 @@ class BusquedaProfundidad(Busqueda):
         solucion = False
         abiertos = []
         cerrados = dict()
-        abiertos.append(NodoProfundidad(inicial, None, None))
+        abiertos.append(NodoProfundidad(inicial, None))
         cerrados[inicial.cubo.visualizar()]=inicial
         while not solucion and len(abiertos)>0:
             nodoActual = abiertos.pop()
@@ -23,7 +23,7 @@ class BusquedaProfundidad(Busqueda):
                 for operador in actual.operadoresAplicables():
                     hijo = actual.aplicarOperador(operador)
                     if hijo.cubo.visualizar() not in cerrados.keys() and hijo.cubo.visualizar() not in abiertos:
-                        abiertos.append(NodoProfundidad(hijo, nodoActual, operador))
+                        abiertos.append(NodoProfundidad(hijo, nodoActual))
                         cerrados[hijo.cubo.visualizar()] = hijo #utilizamos CERRADOS para mantener también traza de los nodos añadidos a ABIERTOS 
         if solucion:
             lista = []
