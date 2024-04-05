@@ -21,10 +21,15 @@ class NodoAnchura(Nodo):
 
 # Nodos usados por la BusquedaProfundidad y BusquedaProfundidadIterativa
 # Añade el atributo de profundidad para registrar la profundidad del nodo
+
 class NodoProfundidad(Nodo):
+    def __init__(self, estado, padre):
+        super().__init__(estado, padre)
+class NodoProfundidadIterativa(Nodo):
     def __init__(self, estado, padre, operador, profundidad):
         super().__init__(estado, padre)
         self.operador=operador
+        self.profundidad=profundidad
 class NodoVoraz:
     def __init__(self, estado, padre, operador, heuristica):
         self.estado = estado
