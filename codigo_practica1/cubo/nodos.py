@@ -23,3 +23,17 @@ class NodoProfundidad(Nodo):
     def __init__(self, estado, padre, operador):
         super().__init__(estado, padre)
         self.operador=operador
+class NodoVoraz:
+    def __init__(self, estado, padre, operador, heuristica):
+        self.estado = estado
+        self.padre = padre
+        self.operador = operador
+        self.heuristica = heuristica
+
+class NodoAStar:
+    def __init__(self, estado, padre, operador, coste, heuristica):
+        self.estado = estado
+        self.padre = padre
+        self.operador = operador
+        self.coste = coste
+        self.heuristica = heuristica
