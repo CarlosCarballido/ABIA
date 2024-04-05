@@ -329,3 +329,11 @@ class Cubo:
 
     def visualizarMovimiento(self,tipo):
         return self.etq_corta[tipo]
+
+    def getEdges(self):
+        edges = []
+        for i in range(0,6):
+            for j in range(0,6):
+                if i != j:
+                    edges.append((self.caras[i],self.caras[j]))
+        return edges
