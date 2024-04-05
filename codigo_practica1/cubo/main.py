@@ -7,6 +7,7 @@ from profundidad import BusquedaProfundidad
 from anchura import BusquedaAnchura
 from profundidad_iterativa import BusquedaProfundidadIterativa
 from voraz import BusquedaVoraz
+from a_star import BusquedaAStar
 
 from cubo import *
 from cubo import Cubo
@@ -15,6 +16,8 @@ from problemaRubik import *
 cubo = Cubo()
 
 print("CUBO SIN MEZCLAR:\n" + cubo.visualizar())
+
+copia_cubo_original = cubo.clonar()
 
 #Mover frontal face
 cubo.mover(cubo.F)
@@ -32,8 +35,28 @@ print()
 
 print("CUBO INICIAL (MEZCLADO):\n" + cubo.visualizar())
 
+opcion = input("Seleccione el numero del algoritmo de búsqueda a emplear \n 1: Anchura\n 2: Profundidad\n 3: Profundidad Iterativa\n 4: Voraz\n 5: A*\n")
+if opcion == "1":
+    print("Busqueda en Anchura")
+    busqueda = BusquedaAnchura()
+elif opcion == "2":
+    print("Busqueda en Profundidad")
+    busqueda = BusquedaProfundidad()
+elif opcion == "3":
+    print("Busqueda en Profundidad Iterativa")
+    busqueda = BusquedaProfundidadIterativa()
+elif opcion == "4":
+    print("Busqueda Voraz")
+    busqueda = BusquedaVoraz()
+elif opcion == "5":
+    print("Busqueda A*")
+    busqueda = BusquedaAStar()
+else:
+    print("Opción no válida")
+    exit()
+
 #Creación de un problema
-problema = Problema(EstadoRubik(cubo), BusquedaVoraz())
+problema = Problema(EstadoRubik(cubo), busqueda)
 
 print("SOLUCION:")
 opsSolucion = problema.obtenerSolucion()
