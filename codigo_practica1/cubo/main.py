@@ -1,70 +1,115 @@
 import sys
+import threading
+import time
+import os
 
-#Añadir al path el directorio donde se encuentran los módulos
-sys.path.append('..')
-
+# Importa las clases necesarias
 from profundidad import BusquedaProfundidad
 from anchura import BusquedaAnchura
 from profundidad_iterativa import BusquedaProfundidadIterativa
 from voraz import BusquedaVoraz
 from a_star import BusquedaAStar
-
-from cubo import *
 from cubo import Cubo
-from problemaRubik import *
+from problemaRubik import Problema, EstadoRubik
 
+# Función para limpiar la pantalla
+def limpiar_pantalla():
+    os.system('cls' if os.name == 'nt' else 'clear')
+
+# Función para obtener la opción del usuario con manejo de errores
+def obtener_opcion(mensaje, opciones):
+    while True:
+        opcion = input(mensaje)
+        if opcion in opciones:
+            return opcion
+        else:
+            print("Opción no válida. Inténtalo de nuevo.")
+
+# Función para ejecutar el contador en un hilo separado
+def contador(tiempo_limite, solucion_encontrada):
+    time.sleep(tiempo_limite)
+    if not solucion_encontrada.is_set():
+        print("Se ha alcanzado el límite de tiempo de 20 segundos.")
+        os._exit(0)
+
+# Inicializa el cubo
 cubo = Cubo()
 
 print("CUBO SIN MEZCLAR:\n" + cubo.visualizar())
 
 copia_cubo_original = cubo.clonar()
 
-#Mover frontal face
+# Mover frontal face
 cubo.mover(cubo.F)
 
 print("CUBO resultado del movimiento F:\n" + cubo.visualizar())
 
-movs=int(sys.argv[1])
+movs = int(sys.argv[1])
 
 movsMezcla = cubo.mezclar(movs)
 
-print("MOVIMIENTOS ALEATORIOS:",movs)
+print("MOVIMIENTOS ALEATORIOS:", movs)
 for m in movsMezcla:
     print(cubo.visualizarMovimiento(m) + " ")
 print()
 
 print("CUBO INICIAL (MEZCLADO):\n" + cubo.visualizar())
 
-opcion = input("Seleccione el numero del algoritmo de búsqueda a emplear \n 1: Anchura\n 2: Profundidad\n 3: Profundidad Iterativa\n 4: Voraz\n 5: A*\n")
-if opcion == "1":
-    print("Busqueda en Anchura")
-    busqueda = BusquedaAnchura()
-elif opcion == "2":
-    print("Busqueda en Profundidad")
-    busqueda = BusquedaProfundidad()
-elif opcion == "3":
-    print("Busqueda en Profundidad Iterativa")
-    busqueda = BusquedaProfundidadIterativa()
-elif opcion == "4":
-    print("Busqueda Voraz")
-    busqueda = BusquedaVoraz()
-elif opcion == "5":
-    print("Busqueda A*")
-    busqueda = BusquedaAStar()
+opcion = obtener_opcion("Seleccione el número del algoritmo de búsqueda a emplear\n1: Anchura\n2: Profundidad\n3: Profundidad Iterativa\n4: Voraz\n5: A*\n", ["1", "2", "3", "4", "5"])
+limpiar_pantalla()
+
+if opcion in ["1", "2", "3"]:
+    algoritmos = {
+        "1": BusquedaAnchura,
+        "2": BusquedaProfundidad,
+        "3": BusquedaProfundidadIterativa
+    }
+    busqueda = algoritmos[opcion]()
+elif opcion in ["4", "5"]:
+    heuristica = obtener_opcion("Seleccione la heurística a emplear\n1: Número de casillas mal colocadas\n2: Número de casillas bien colocadas\n3: Color Clustering\n", ["1", "2", "3"])
+    limpiar_pantalla()
+    algoritmo = {
+        "4": BusquedaVoraz,
+        "5": BusquedaAStar
+    }
+    busqueda = algoritmo[opcion]()
+    if heuristica == "1":
+        busqueda.heuristicFunction = busqueda.heuristicFunctionCasillasMalColocadas
+    elif heuristica == "2":
+        busqueda.heuristicFunction = busqueda.heuristicFunctionPosicionesCorrectas
+    elif heuristica == "3":
+        busqueda.heuristicFunction = busqueda.heuristicFunctionColorClustering
 else:
     print("Opción no válida")
     exit()
 
-#Creación de un problema
+# Creación de un problema
 problema = Problema(EstadoRubik(cubo), busqueda)
+
+opcion = obtener_opcion("¿Desea establecer un límite de tiempo de ejecución de 20 segundos? (s/n): ", ["s", "n"])
+limpiar_pantalla()
+if opcion == "s":
+    # Señal para indicar si se ha encontrado una solución
+    solucion_encontrada = threading.Event()
+
+    # Crea y ejecuta el hilo del contador
+    tiempo_limite = 20  # Tiempo límite en segundos
+    hilo_contador = threading.Thread(target=contador, args=(tiempo_limite, solucion_encontrada))
+    hilo_contador.start()
 
 print("SOLUCION:")
 opsSolucion = problema.obtenerSolucion()
 
-if opsSolucion != None:
+# Marca que se ha encontrado una solución
+if opcion == "s":
+    solucion_encontrada.set()
+
+if opsSolucion is not None:
     for o in opsSolucion:
         print(cubo.visualizarMovimiento(o.getEtiqueta()) + " ")
         cubo.mover(o.movimiento)
     print("\nCUBO FINAL:\n" + cubo.visualizar())
+    os._exit(0)
 else:
-    print("no se ha encontrado solución")
+    print("No se ha encontrado solución")
+    os._exit(0)

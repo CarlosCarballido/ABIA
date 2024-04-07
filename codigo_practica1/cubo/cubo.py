@@ -28,6 +28,7 @@ class Cara:
 class Casilla:
     def __init__(self, color, pos):
         self.color=color
+        self.pos=pos
         self.posicionCorrecta=pos
 
 
@@ -36,12 +37,8 @@ class Casilla:
         if self.color != casilla.color or self.posicionCorrecta != casilla.posicionCorrecta: return False
         return True
 
-
-    
-        
-
-
-
+    def __str__(self):
+        return f"Casilla(color={self.color}, posicionCorrecta={self.posicionCorrecta})"
 
 #Clase que encapsula un cubo de Rubik.
 #Almacena la situación actual del Cubo en un array de 6 objetos Cara. Cada objeto Cara almacena
