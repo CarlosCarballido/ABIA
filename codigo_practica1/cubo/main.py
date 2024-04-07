@@ -51,6 +51,14 @@ elif opcion == "4":
 elif opcion == "5":
     print("Busqueda A*")
     busqueda = BusquedaAStar()
+    opcion = input("Seleccione la heurística a emplear \n 1: Número de casillas mal colocadas\n 2: Distancia de Manhattan\n")
+    if opcion == "1":
+        busqueda.heuristicFunction = busqueda.heuristicFunctionCasillasMalColocadas
+    elif opcion == "2":
+        busqueda.heuristicFunction = busqueda.heuristicFunctionManhattan
+    else:
+        print("Opción no válida")
+        exit()
 else:
     print("Opción no válida")
     exit()

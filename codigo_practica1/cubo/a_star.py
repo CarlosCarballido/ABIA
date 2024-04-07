@@ -5,26 +5,25 @@ class BusquedaAStar(Busqueda):
     def __init__(self):
         pass
 
-    # Define la función heurística aquí dentro de la clase BusquedaAStar
-    def heuristic_function(self, estado):
-        # Implementa tu función heurística aquí
-        # Por ejemplo, una heurística común para el cubo de Rubik podría ser el número de casillas mal colocadas
-        cubo_actual = estado.cubo
-        casillas_mal_colocadas = 0
-        for cara in cubo_actual.caras:
-            for casilla in cara.casillas:
-                if casilla.color != cara.color:
-                    casillas_mal_colocadas += 1
-        return casillas_mal_colocadas
-
     def buscarSolucion(self, inicial):
         nodoActual = None
         actual, hijo = None, None
         solucion = False
         abiertos = []
         cerrados = {}
+        
+        print(f"Funcion heuristica: {type(self.heuristicFunction)}")
+        
+        """if self.heuristicFunction == self.heuristicFunctionCasillasMalColocadas:
+            heuristicFunction = self.heuristicFunctionCasillasMalColocadas
+        elif heuristicFunction == 2:
+            heuristicFunction = self.heuristicFunctionManhattan
+        elif heuristicFunction == 3:
+            pass
+        else:
+            return None"""
         # Agrega el nodo inicial a la lista de abiertos con un costo heurístico inicial de 0
-        abiertos.append(NodoAStar(inicial, None, None, 0, self.heuristic_function(inicial)))
+        abiertos.append(NodoAStar(inicial, None, None, 0, self.heuristicFunction(inicial)))
         cerrados[inicial.cubo.visualizar()] = inicial
         while not solucion and abiertos:
             # Selecciona el nodo actual basándose en la suma del costo heurístico y el costo acumulado hasta el momento
@@ -40,7 +39,7 @@ class BusquedaAStar(Busqueda):
                     if hijo.cubo.visualizar() not in cerrados.keys():
                         # Calcula el costo heurístico del hijo y crea un nuevo nodo A* con el costo acumulado y la heurística
                         coste = nodoActual.coste + operador.getCoste()
-                        abiertos.append(NodoAStar(hijo, nodoActual, operador, coste, self.heuristic_function(hijo)))
+                        abiertos.append(NodoAStar(hijo, nodoActual, operador, coste, self.heuristicFunction(hijo)))
                         cerrados[hijo.cubo.visualizar()] = hijo
         if solucion:
             lista = []
