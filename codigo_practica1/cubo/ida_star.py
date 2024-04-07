@@ -2,7 +2,16 @@ from busqueda import Busqueda
 from profundidad import BusquedaProfundidad
 from nodos import NodoIDAStar
 
-class BusquedaIDAStar(Busqueda):    
+class BusquedaIDAStar(Busqueda):  
+    
+    def expandir_nodo(self, actual, nodoActual, abiertos, cerrados):
+        for operador in actual.operadoresAplicables():
+            hijo = actual.aplicarOperador(operador)
+            if hijo.cubo.visualizar() not in cerrados.keys():
+                coste = nodoActual.coste + operador.getCoste()
+                abiertos.append(NodoIDAStar(hijo, nodoActual, operador, coste))
+                cerrados[hijo.cubo.visualizar()] = hijo  
+    
     def buscarSolucion(self, inicial):
         nodoActual = None
         actual, hijo = None, None
@@ -21,12 +30,13 @@ class BusquedaIDAStar(Busqueda):
             else:
                 cerrados[actual.cubo.visualizar()] = actual
                 if nodoActual.coste < limite:
-                    for operador in actual.operadoresAplicables():
-                        hijo = actual.aplicarOperador(operador)
-                        if hijo.cubo.visualizar() not in cerrados.keys():
-                            coste = nodoActual.coste + operador.getCoste()
-                            abiertos.append(NodoIDAStar(hijo, nodoActual, operador, coste))
-                            cerrados[hijo.cubo.visualizar()] = hijo
+                    self.expandir_nodo(actual, nodoActual, abiertos, cerrados)
+                else:
+                    nodoActual = None
+                    abiertos = []
+                    cerrados = {}
+                    limite += 1
+                
         if solucion:
             lista = []
             nodo = nodoActual
@@ -36,3 +46,4 @@ class BusquedaIDAStar(Busqueda):
             return lista
         else:
             return None
+        
