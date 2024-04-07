@@ -12,16 +12,6 @@ class BusquedaAStar(Busqueda):
         abiertos = []
         cerrados = {}
         
-        print(f"Funcion heuristica: {type(self.heuristicFunction)}")
-        
-        """if self.heuristicFunction == self.heuristicFunctionCasillasMalColocadas:
-            heuristicFunction = self.heuristicFunctionCasillasMalColocadas
-        elif heuristicFunction == 2:
-            heuristicFunction = self.heuristicFunctionManhattan
-        elif heuristicFunction == 3:
-            pass
-        else:
-            return None"""
         # Agrega el nodo inicial a la lista de abiertos con un costo heurístico inicial de 0
         abiertos.append(NodoAStar(inicial, None, None, 0, self.heuristicFunction(inicial)))
         cerrados[inicial.cubo.visualizar()] = inicial

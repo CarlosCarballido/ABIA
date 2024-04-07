@@ -12,7 +12,7 @@ class BusquedaVoraz(Busqueda):
         abiertos = []
         cerrados = dict()
         # Inicializa la lista de abiertos con el nodo inicial
-        abiertos.append(NodoVoraz(inicial, None, None, self.calcularHeuristica(inicial)))
+        abiertos.append(NodoVoraz(inicial, None, None, self.heuristicFunction(inicial)))
         cerrados[inicial.cubo.visualizar()] = inicial
         while not solucion and len(abiertos) > 0:
             # Selecciona el nodo actual basándose en una heurística
@@ -30,7 +30,7 @@ class BusquedaVoraz(Busqueda):
                     if hijo.cubo.visualizar() not in cerrados.keys():
                         # Calcula la heurística para el hijo y crea un nuevo nodo voraz
                         # Agrega el nodo hijo a la lista de abiertos
-                        abiertos.append(NodoVoraz(hijo, nodoActual, operador, self.calcularHeuristica(hijo)))
+                        abiertos.append(NodoVoraz(hijo, nodoActual, operador, self.heuristicFunction(hijo)))
                         cerrados[hijo.cubo.visualizar()] = hijo
         if solucion:
             lista = []
