@@ -44,3 +44,11 @@ class NodoAStar:
         self.operador = operador
         self.coste = coste
         self.heuristica = heuristica
+
+class NodoIDAStar:
+    def __init__(self, estado, padre, operador, coste, heuristica):
+        self.estado = estado
+        self.padre = padre
+        self.operador = operador
+        self.coste = coste
+        self.heuristica = heuristica
