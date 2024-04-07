@@ -9,6 +9,7 @@ from anchura import BusquedaAnchura
 from profundidad_iterativa import BusquedaProfundidadIterativa
 from voraz import BusquedaVoraz
 from a_star import BusquedaAStar
+from ida_star import BusquedaIDAStar
 from cubo import Cubo
 from problemaRubik import Problema, EstadoRubik
 
@@ -52,10 +53,10 @@ print("MOVIMIENTOS ALEATORIOS:", movs)
 for m in movsMezcla:
     print(cubo.visualizarMovimiento(m) + " ")
 print()
-
+cubo_inicial_mezclado = cubo.visualizar()
 print("CUBO INICIAL (MEZCLADO):\n" + cubo.visualizar())
 
-opcion = obtener_opcion("Seleccione el número del algoritmo de búsqueda a emplear\n1: Anchura\n2: Profundidad\n3: Profundidad Iterativa\n4: Voraz\n5: A*\n", ["1", "2", "3", "4", "5"])
+opcion = obtener_opcion("Seleccione el número del algoritmo de búsqueda a emplear\n1: Anchura\n2: Profundidad\n3: Profundidad Iterativa\n4: Voraz\n5: A*\n6: IDA*\n", ["1", "2", "3", "4", "5", "6"])
 limpiar_pantalla()
 
 if opcion in ["1", "2", "3"]:
@@ -65,12 +66,13 @@ if opcion in ["1", "2", "3"]:
         "3": BusquedaProfundidadIterativa
     }
     busqueda = algoritmos[opcion]()
-elif opcion in ["4", "5"]:
+elif opcion in ["4", "5", "6"]:
     heuristica = obtener_opcion("Seleccione la heurística a emplear\n1: Número de casillas mal colocadas\n2: Número de casillas bien colocadas\n3: Color Clustering\n", ["1", "2", "3"])
     limpiar_pantalla()
     algoritmo = {
         "4": BusquedaVoraz,
-        "5": BusquedaAStar
+        "5": BusquedaAStar,
+        "6": BusquedaIDAStar
     }
     busqueda = algoritmo[opcion]()
     if heuristica == "1":
@@ -105,8 +107,9 @@ if opcion == "s":
     solucion_encontrada.set()
 
 if opsSolucion is not None:
+    print(f"CUBO INICIAL (MEZCLADO):\n{cubo_inicial_mezclado}\nMovimientos para resolver el cubo:{len(opsSolucion)}\nMovimientos:")
     for o in opsSolucion:
-        print(cubo.visualizarMovimiento(o.getEtiqueta()) + " ")
+        print("\t" + cubo.visualizarMovimiento(o.getEtiqueta()) + " ")
         cubo.mover(o.movimiento)
     print("\nCUBO FINAL:\n" + cubo.visualizar())
     os._exit(0)
