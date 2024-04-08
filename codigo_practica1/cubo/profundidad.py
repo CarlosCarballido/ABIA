@@ -22,7 +22,7 @@ class BusquedaProfundidad(Busqueda):
             if self.nodosAbiertosMax < len(abiertos):
                 self.nodosAbiertosMax = len(abiertos)
 
-            nodoActual = abiertos.pop(-1)  # Pop del último elemento para realizar una búsqueda en profundidad
+            nodoActual = abiertos.pop()  # Pop del último elemento para realizar una búsqueda en profundidad
             actual = nodoActual.estado
             if actual.esFinal():
                 solucion = True
