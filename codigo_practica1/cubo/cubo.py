@@ -1,6 +1,8 @@
 
 from random import *
 
+from matplotlib import pyplot as plt
+
 seed(76)
 
 #Clase que encapsula una cara del cubo de Rubik.
@@ -310,7 +312,47 @@ class Cubo:
 
         # Cara 5
         resultado += "    " + self.stringFila1(self.caras[5]) + "\n" + "    " + self.stringFila2(self.caras[5]) + "\n" + "    " + self.stringFila3(self.caras[5]) + "\n\n"
+        
         return resultado
+    
+    def visualizarGrafico(self):
+        resultado = "    " + self.stringFila1(self.caras[0]) + "\n" +"    " + self.stringFila2(self.caras[0]) + "\n" +"    " + self.stringFila3(self.caras[0]) + "\n\n"
+
+        # Caras 1, 2, 3, 4
+        resultado += self.stringFila1(self.caras[1]) + " " + self.stringFila1(self.caras[2]) + " " + self.stringFila1(self.caras[3]) + " " + self.stringFila1(self.caras[4]) + "\n" + self.stringFila2(self.caras[1]) + " " + self.stringFila2(self.caras[2]) + " " +self.stringFila2(self.caras[3]) + " " + self.stringFila2(self.caras[4]) + "\n" +self.stringFila3(self.caras[1]) + " " + self.stringFila3(self.caras[2]) + " " +self.stringFila3(self.caras[3]) + " " + self.stringFila3(self.caras[4]) + "\n\n"
+
+        # Cara 5
+        resultado += "    " + self.stringFila1(self.caras[5]) + "\n" + "    " + self.stringFila2(self.caras[5]) + "\n" + "    " + self.stringFila3(self.caras[5]) + "\n\n"
+        
+        colores = {
+            "W": (0.5, 0.5, 0.5),  # Blanco
+            "B": (0, 0, 1),  # Azul
+            "O": (1, 0.5, 0),  # Naranja
+            "G": (0, 1, 0),  # Verde
+            "R": (1, 0, 0),  # Rojo
+            "Y": (1, 1, 0),  # Amarillo
+        }
+
+        fig = plt.figure(figsize=(9, 6))
+        
+        # Crear subtramas para cada cara del cubo
+        axs = {}
+        for i in range(6):
+            axs[i] = fig.add_subplot(2, 3, i + 1)
+            axs[i].axis('off')
+            
+        # Dibujar cada cara
+        for i in range(6):
+            for j in range(3):
+                for k in range(3):
+                    axs[i].add_patch(plt.Rectangle((k, -j), 0.5, 0.5, color=colores[self.etq_colores[self.caras[i].casillas[3 * j + k].color]]))
+
+        # Ajustar límites de los ejes
+        for i in range(6):
+            axs[i].set_xlim(-0.5, 2.5)
+            axs[i].set_ylim(-2.5, 0.5)
+
+        plt.show()
 
     def  stringFila1(self,cara):
         return self.etq_colores[cara.casillas[0].color] + self.etq_colores[cara.casillas[1].color] + self.etq_colores[cara.casillas[2].color]
