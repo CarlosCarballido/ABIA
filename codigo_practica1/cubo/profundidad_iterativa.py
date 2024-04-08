@@ -2,7 +2,7 @@ import time
 from busqueda import *
 from nodos import NodoProfundidadIterativa
 
-class BusquedaProfundidadIterativa(Busqueda):
+class BusquedaProfundidadIterativa(BusquedaNoInformada):
     
     def __init__(self) -> None:
         super().__init__()

@@ -1,9 +1,8 @@
 import time
-from busqueda import Busqueda
-from profundidad import BusquedaProfundidad
+from busqueda import BusquedaInformada
 from nodos import NodoIDAStar
 
-class BusquedaIDAStar(Busqueda):  
+class BusquedaIDAStar(BusquedaInformada):  
     
     def __init__(self) -> None:
         super().__init__()

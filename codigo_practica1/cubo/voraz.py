@@ -1,8 +1,7 @@
-import time
 from busqueda import *
 from nodos import NodoVoraz
 
-class BusquedaVoraz(Busqueda):
+class BusquedaVoraz(BusquedaInformada):
     
     def __init__(self) -> None:
         super().__init__()
