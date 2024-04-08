@@ -2,7 +2,7 @@ from busqueda import *
 from nodos import NodoProfundidad
 
 
-class BusquedaProfundidad(Busqueda):
+class BusquedaProfundidad(BusquedaNoInformada):
     
     def __init__(self) -> None:
         super().__init__()

@@ -2,14 +2,8 @@ from busqueda import *
 from nodos import NodoAnchura
 
 
-class BusquedaAnchura(Busqueda):
+class BusquedaAnchura(BusquedaNoInformada):
     
-    def __init__(self) -> None:
-        super().__init__()
-        self.nodosAbiertosTotal = 1
-        self.nodosAbiertosMax = 0
-    
-    #Implementa la búsqueda en anchura. Si encuentra solución recupera la lista de Operadores empleados almacenada en los atributos de los objetos NodoAnchura
     def buscarSolucion(self,inicial):
         nodoActual = None
         actual, hijo = None, None

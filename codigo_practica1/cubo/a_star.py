@@ -1,12 +1,8 @@
 import time
 from nodos import NodoAStar
-from busqueda import Busqueda
+from busqueda import BusquedaInformada
 
-class BusquedaAStar(Busqueda):
-    def __init__(self) -> None:
-        super().__init__()
-        self.nodosAbiertosTotal = 1
-        self.nodosAbiertosMax = 0
+class BusquedaAStar(BusquedaInformada):
 
     def buscarSolucion(self, inicial):
         nodoActual = None

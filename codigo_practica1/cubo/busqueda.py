@@ -5,9 +5,23 @@ from abc import ABCMeta
 
 #Interfaz genérico para algoritmos de búsqueda
 class Busqueda(metaclass=ABCMeta):
+    
+    def __init__(self) -> None:
+        self.nodosAbiertosTotal = 1
+        self.nodosAbiertosMax = 0
+    
     @abstractmethod
     def buscarSolucion(self, inicial, heuristica=0):
         pass
+    
+    
+class BusquedaNoInformada(Busqueda):
+        
+    def buscarSolucion(self, inicial):
+        pass
+    
+    
+class BusquedaInformada(Busqueda):
     
     def heuristicFunctionPosicionesCorrectas(self, estado):
         cubo_actual = estado.cubo
