@@ -4,11 +4,6 @@ from nodos import NodoIDAStar
 
 class BusquedaIDAStar(BusquedaInformada):  
     
-    def __init__(self) -> None:
-        super().__init__()
-        self.nodosAbiertosTotal = 1
-        self.nodosAbiertosMax = 0
-    
     def expandir_nodo(self, actual, nodoActual, abiertos, cerrados):
         for operador in actual.operadoresAplicables():
             hijo = actual.aplicarOperador(operador)
