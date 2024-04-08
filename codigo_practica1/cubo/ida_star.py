@@ -14,7 +14,7 @@ class BusquedaIDAStar(BusquedaInformada):
     
     def buscarSolucion(self, inicial):
         nodoActual = None
-        actual, hijo = None, None
+        actual = None
         solucion = False
         abiertos = []
         cerrados = {}
