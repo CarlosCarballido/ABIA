@@ -1,37 +1,14 @@
 import sys
-import threading
 import time
-import os
+import matplotlib.pyplot as plt
 
 # Importa las clases necesarias
-from profundidad import BusquedaProfundidad
 from anchura import BusquedaAnchura
 from profundidad_iterativa import BusquedaProfundidadIterativa
-from voraz import BusquedaVoraz
 from a_star import BusquedaAStar
 from ida_star import BusquedaIDAStar
 from cubo import Cubo
 from problemaRubik import Problema, EstadoRubik
-
-# Función para limpiar la pantalla
-def limpiar_pantalla():
-    os.system('cls' if os.name == 'nt' else 'clear')
-
-# Función para obtener la opción del usuario con manejo de errores
-def obtener_opcion(mensaje, opciones):
-    while True:
-        opcion = input(mensaje)
-        if opcion in opciones:
-            return opcion
-        else:
-            print("Opción no válida. Inténtalo de nuevo.")
-
-# Función para ejecutar el contador en un hilo separado
-def contador(tiempo_limite, solucion_encontrada):
-    time.sleep(tiempo_limite)
-    if not solucion_encontrada.is_set():
-        print("Se ha alcanzado el límite de tiempo de 20 segundos.")
-        os._exit(0)
 
 # Inicializa el cubo
 cubo = Cubo()
@@ -57,75 +34,106 @@ print()
 cubo_inicial_mezclado = cubo.clonar()
 print("CUBO INICIAL (MEZCLADO):\n" + cubo.visualizar())
 
-opcion = obtener_opcion("Seleccione el número del algoritmo de búsqueda a emplear\n1: Anchura\n2: Profundidad\n3: Profundidad Iterativa\n4: Voraz\n5: A*\n6: IDA*\n", ["1", "2", "3", "4", "5", "6"])
-limpiar_pantalla()
+# Lista de algoritmos de búsqueda
+algoritmos = {
+    "1": BusquedaAnchura(),
+    "2": BusquedaProfundidadIterativa(),
+    "4": BusquedaAStar(),
+    "5": BusquedaIDAStar()
+}
 
-if opcion in ["1", "2", "3"]:
-    algoritmos = {
-        "1": BusquedaAnchura,
-        "2": BusquedaProfundidad,
-        "3": BusquedaProfundidadIterativa
-    }
-    busqueda = algoritmos[opcion]()
-elif opcion in ["4", "5", "6"]:
-    heuristica = obtener_opcion("Seleccione la heurística a emplear\n1: Número de casillas mal colocadas\n2: Número de casillas bien colocadas\n3: Color Clustering\n", ["1", "2", "3"])
-    limpiar_pantalla()
-    algoritmo = {
-        "4": BusquedaVoraz,
-        "5": BusquedaAStar,
-        "6": BusquedaIDAStar
-    }
-    busqueda = algoritmo[opcion]()
-    if heuristica == "1":
-        busqueda.heuristicFunction = busqueda.heuristicFunctionCasillasMalColocadas
-    elif heuristica == "2":
-        busqueda.heuristicFunction = busqueda.heuristicFunctionPosicionesCorrectas
-    elif heuristica == "3":
-        busqueda.heuristicFunction = busqueda.heuristicFunctionColorClustering
-else:
-    print("Opción no válida")
-    exit()
+# Lista de heurísticas para la búsqueda A*
+heuristicas_a_star = {
+    "1": BusquedaAStar().heuristicFunctionCasillasMalColocadas,
+    "2": BusquedaAStar().heuristicFunctionPosicionesCorrectas,
+    "3": BusquedaAStar().heuristicFunctionColorClustering
+}
 
-# Creación de un problema
-problema = Problema(EstadoRubik(cubo), busqueda)
+# Lista de heurísticas para la búsqueda IDA*
+heuristicas_ida_star = {
+    "1": BusquedaIDAStar().heuristicFunctionCasillasMalColocadas,
+    "2": BusquedaIDAStar().heuristicFunctionPosicionesCorrectas,
+    "3": BusquedaIDAStar().heuristicFunctionColorClustering
+}
 
-opcion = obtener_opcion("¿Desea establecer un límite de tiempo de ejecución de 20 segundos? (s/n): ", ["s", "n"])
-limpiar_pantalla()
+# Listas para almacenar los tiempos de búsqueda y los nombres de los algoritmos
+tiempos_busqueda = []
+nombres_algoritmos = []
 
-if opcion == "s":
-    # Creación de un hilo para contar el tiempo
-    solucion_encontrada = threading.Event()
+# Después de mezclar el cubo
+cubo_inicial_mezclado = cubo.clonar()
 
-    tiempo_limite = 20  # Tiempo límite en segundos
-    hilo_contador = threading.Thread(target=contador, args=(tiempo_limite, solucion_encontrada))
-    hilo_contador.start()
-
-print("SOLUCION:")
-tiempo_inicio = time.time()
-opsSolucion = problema.obtenerSolucion()
-
-# Marca que se ha encontrado una solución
-if opcion == "s":
-    solucion_encontrada.set()
-
-if opsSolucion is not None:
-    timepo_final = time.time()
-    print(f"CUBO INICIAL (MEZCLADO):\n{cubo_inicial_mezclado.visualizar()}\nMovimientos para resolver el cubo:{len(opsSolucion)}\nMovimientos:")
-    for o in opsSolucion:
-        print("\t" + cubo.visualizarMovimiento(o.getEtiqueta()) + " ")
-        cubo.mover(o.movimiento)
-    print("\nCUBO FINAL:\n" + cubo.visualizar())
-    print("Tiempo de búsqueda: ", timepo_final - tiempo_inicio)
+# Bucle sobre todos los algoritmos de búsqueda
+for opcion_busqueda, busqueda in algoritmos.items():
+    nombre_algoritmo = busqueda.__class__.__name__
+    nombres_algoritmos.append(nombre_algoritmo)
     
-    opcion = obtener_opcion("¿Desea visualizar un grafico con el CUBO INICIAL (MEZCLADO)? (s/n): ", ["s", "n"])
-    if opcion == "s":
-        cubo_inicial_mezclado.visualizarGrafico()
-    opcion = obtener_opcion("¿Desea visualizar un grafico con el CUBO FINAL? (s/n): ", ["s", "n"])
-    if opcion == "s":
-        cubo.visualizarGrafico()
+    # Lista para almacenar los tiempos de búsqueda para este algoritmo
+    tiempos_heuristicas = []
     
-    
-    os._exit(0)
-else:
-    print("No se ha encontrado solución")
-    os._exit(0)
+    # Check if the algorithm is not greedy search
+    if opcion_busqueda != "3":  # Avoiding greedy search (Búsqueda Voraz)
+        
+        # If the algorithm requires a heuristic
+        if opcion_busqueda == "4":  # Búsqueda A*
+            # Bucle sobre todas las heurísticas para la búsqueda A*
+            for opcion_heuristica, heuristicFunction in heuristicas_a_star.items():
+                # Configura la heurística
+                busqueda.heuristicFunction = heuristicFunction
+                
+                # Creación de un problema
+                problema = Problema(EstadoRubik(cubo_inicial_mezclado), busqueda)
+                
+                # Resolución del problema
+                tiempo_inicio = time.time()
+                opsSolucion = problema.obtenerSolucion()
+                tiempo_final = time.time()
+                
+                # Calcula el tiempo de búsqueda
+                tiempo_busqueda = tiempo_final - tiempo_inicio
+                tiempos_heuristicas.append(tiempo_busqueda)
+        
+            # Almacena el tiempo más corto de todas las heurísticas para este algoritmo
+            tiempos_busqueda.append(min(tiempos_heuristicas))
+        elif opcion_busqueda == "5":  # Búsqueda IDA*
+            # Bucle sobre todas las heurísticas para la búsqueda IDA*
+            for opcion_heuristica, heuristicFunction in heuristicas_ida_star.items():
+                # Configura la heurística
+                busqueda.heuristicFunction = heuristicFunction
+                
+                # Creación de un problema
+                problema = Problema(EstadoRubik(cubo_inicial_mezclado), busqueda)
+                
+                # Resolución del problema
+                tiempo_inicio = time.time()
+                opsSolucion = problema.obtenerSolucion()
+                tiempo_final = time.time()
+                
+                # Calcula el tiempo de búsqueda
+                tiempo_busqueda = tiempo_final - tiempo_inicio
+                tiempos_heuristicas.append(tiempo_busqueda)
+        
+            # Almacena el tiempo más corto de todas las heurísticas para este algoritmo
+            tiempos_busqueda.append(min(tiempos_heuristicas))
+        else:
+            # Creación de un problema para los otros algoritmos
+            problema = Problema(EstadoRubik(cubo_inicial_mezclado), busqueda)
+            
+            # Resolución del problema
+            tiempo_inicio = time.time()
+            opsSolucion = problema.obtenerSolucion()
+            tiempo_final = time.time()
+            
+            # Calcula el tiempo de búsqueda
+            tiempo_busqueda = tiempo_final - tiempo_inicio
+            tiempos_busqueda.append(tiempo_busqueda)
+
+# Genera la gráfica de barras
+plt.figure(figsize=(10, 6))
+plt.bar(nombres_algoritmos, tiempos_busqueda, color='skyblue')
+plt.xlabel('Algoritmo de Búsqueda')
+plt.ylabel('Tiempo de Búsqueda (segundos)')
+plt.title('Tiempo de Búsqueda por Algoritmo de Búsqueda')
+plt.xticks(rotation=45, ha='right')
+plt.tight_layout()
+plt.show()
