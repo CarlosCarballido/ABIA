@@ -1,8 +1,14 @@
+import time
 from busqueda import Busqueda
 from profundidad import BusquedaProfundidad
 from nodos import NodoIDAStar
 
 class BusquedaIDAStar(Busqueda):  
+    
+    def __init__(self) -> None:
+        super().__init__()
+        self.nodosAbiertosTotal = 1
+        self.nodosAbiertosMax = 0
     
     def expandir_nodo(self, actual, nodoActual, abiertos, cerrados):
         for operador in actual.operadoresAplicables():
@@ -23,7 +29,10 @@ class BusquedaIDAStar(Busqueda):
         cerrados[inicial.cubo.visualizar()] = inicial
         while not solucion and abiertos:
             nodoActual = min(abiertos, key=lambda x: x.coste)
+            if self.nodosAbiertosMax < len(abiertos):
+                self.nodosAbiertosMax = len(abiertos)
             abiertos.remove(nodoActual)
+            self.nodosAbiertosTotal += 1
             actual = nodoActual.estado
             if actual.esFinal():
                 solucion = True
@@ -43,6 +52,12 @@ class BusquedaIDAStar(Busqueda):
             while nodo.padre is not None:
                 lista.insert(0, nodo.operador)
                 nodo = nodo.padre
+                
+            print("Total Nodos abiertos: ", self.nodosAbiertosTotal)
+            print("Máximo de nodos abiertos sinmultaneamente: ", self.nodosAbiertosMax)
+            print("Total nodos cerrados: ", len(cerrados))
+            print("Total nodos explorados: ", self.nodosAbiertosTotal + len(cerrados))
+            print("Profundidad de la solución: ", len(lista))
             return lista
         else:
             return None
