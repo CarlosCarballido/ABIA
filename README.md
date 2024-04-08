@@ -24,7 +24,7 @@ The Rubik's Cube is a mechanical three-dimensional puzzle, invented by Hungarian
 
 1. Clone this repository to your local machine:
 
-   git clone [](https://github.com/CarlosCarballido/ABIA.git)
+   git clone [https://github.com/CarlosCarballido/ABIA.git](https://github.com/CarlosCarballido/ABIA.git)
 
 2. Navigate to the project directory:
 
