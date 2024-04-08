@@ -1,5 +1,7 @@
 # Rubik's Cube Solver
 
+Spanish Version
+
 This is a Python project to solve the Rubik's Cube using different search algorithms.
 
 ## Description
