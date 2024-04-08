@@ -4,11 +4,6 @@ from nodos import NodoProfundidadIterativa
 
 class BusquedaProfundidadIterativa(BusquedaNoInformada):
     
-    def __init__(self) -> None:
-        super().__init__()
-        self.nodosAbiertosTotal = 1
-        self.nodosAbiertosMax = 0
-    
     def buscarSolucion(self, inicial):
         profundidad_maxima = 0
         solucion = None

@@ -3,11 +3,6 @@ from nodos import NodoVoraz
 
 class BusquedaVoraz(BusquedaInformada):
     
-    def __init__(self) -> None:
-        super().__init__()
-        self.nodosAbiertosTotal = 1
-        self.nodosAbiertosMax = 0
-    
     def buscarSolucion(self, inicial):
         nodoActual = None
         actual, hijo = None, None
